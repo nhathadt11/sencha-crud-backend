@@ -55,3 +55,9 @@ This will do a clean install of the entire project:
 This will deploy the built app to configured tomcat server:
   - Linux: ```./deploy.sh```
   - Windows: ```deploy.bat```
+
+### Stopping
+
+This will stop a running tomcat server:
+  - Linux: ```./stop.sh```
+  - Windows: ```stop.bat```
