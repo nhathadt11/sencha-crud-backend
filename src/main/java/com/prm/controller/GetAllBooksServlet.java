@@ -1,18 +1,21 @@
 package com.prm.controller;
 
-import com.prm.dao.UserDao;
-import com.prm.model.User;
+import com.prm.dao.BookDao;
+import com.prm.model.Book;
+
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "GetAllBooksServlet", urlPatterns = {"/GetAllBooksServlet"})
+public class GetAllBooksServlet extends HttpServlet {
 
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,17 +32,16 @@ public class LoginServlet extends HttpServlet {
     response.setHeader("Access-Control-Allow-Origin", "*");
 
     try (PrintWriter out = response.getWriter()) {
-      String username = request.getParameter("username");
-      String password = request.getParameter("password");
+      JSONArray books = new JSONArray();
+      BookDao bookDao = new BookDao();
+      List<Book> result = bookDao.getAllBooks();
 
-      User user = new UserDao().checkLogin(username, password);
-      if (user != null) {
-        response.setStatus(HttpServletResponse.SC_OK);
-        out.print(JSONObject.fromObject(user));
-        out.flush();
-      } else {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      for (Book book : result) {
+        books.add(JSONObject.fromObject(book));
       }
+
+      response.setStatus(HttpServletResponse.SC_OK);
+      out.println(books.toString());
     }
   }
 
@@ -91,7 +93,6 @@ public class LoginServlet extends HttpServlet {
 
   private void setAccessControlHeaders(HttpServletResponse response) {
     response.setHeader("Access-Control-Allow-Origin", "*");
-    response.setHeader("Access-Control-Allow-Methods", "*");
     response.setHeader(
         "Access-Control-Allow-Headers",
         "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
