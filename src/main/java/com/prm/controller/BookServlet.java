@@ -17,34 +17,16 @@ import net.sf.json.JSONObject;
 @WebServlet(name = "BookServlet", urlPatterns = {"/Books"})
 public class BookServlet extends HttpServlet {
 
-  /**
-   * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-   * methods.
-   *
-   * @param request servlet request
-   * @param response servlet response
-   * @throws ServletException if a servlet-specific error occurs
-   * @throws IOException if an I/O error occurs
-   */
-  protected void preProcessRequest(HttpServletRequest request, HttpServletResponse response)
+  private void preProcessResponse(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     response.setContentType("application/json");
     response.setHeader("Access-Control-Allow-Origin", "*");
   }
 
-  // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-  /**
-   * Handles the HTTP <code>GET</code> method.
-   *
-   * @param request servlet request
-   * @param response servlet response
-   * @throws ServletException if a servlet-specific error occurs
-   * @throws IOException if an I/O error occurs
-   */
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    preProcessRequest(request, response);
+    preProcessResponse(request, response);
 
     try (PrintWriter out = response.getWriter()) {
       JSONArray books = new JSONArray();
@@ -60,29 +42,13 @@ public class BookServlet extends HttpServlet {
     }
   }
 
-  /**
-   * Handles the HTTP <code>POST</code> method.
-   *
-   * @param request servlet request
-   * @param response servlet response
-   * @throws ServletException if a servlet-specific error occurs
-   * @throws IOException if an I/O error occurs
-   */
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    preProcessRequest(request, response);
+    preProcessResponse(request, response);
 
     try (PrintWriter out = response.getWriter()) {
-      String title        = request.getParameter("title");
-      String author       = request.getParameter("author");
-      String publisher    = request.getParameter("publisher");
-      boolean available   = Boolean.parseBoolean(request.getParameter("available"));
-      int quantity        = Integer.parseInt(request.getParameter("quantity"));
-      String genre        = request.getParameter("genre");
-      String description  = request.getParameter("description");
-
-      boolean success = new BookDao().insert(new Book(title, author, publisher, available, quantity, genre, description));
+      boolean success = new BookDao().insert(from(request));
 
       if (success) {
         response.setStatus(HttpServletResponse.SC_OK);
@@ -92,15 +58,20 @@ public class BookServlet extends HttpServlet {
     }
   }
 
-  /**
-   * Returns a short description of the servlet.
-   *
-   * @return a String containing servlet description
-   */
   @Override
-  public String getServletInfo() {
-    return "Short description";
-  }// </editor-fold>
+  protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    preProcessResponse(request, response);
+
+    try (PrintWriter out = response.getWriter()) {
+      boolean success = new BookDao().update(from(request));
+
+      if (success) {
+        response.setStatus(HttpServletResponse.SC_OK);
+      } else {
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      }
+    }
+  }
 
   @Override
   protected void doOptions(HttpServletRequest request, HttpServletResponse response)
@@ -109,8 +80,22 @@ public class BookServlet extends HttpServlet {
     response.setStatus(HttpServletResponse.SC_OK);
   }
 
+  private Book from(HttpServletRequest request) {
+    int id              = Integer.parseInt(request.getParameter("id"));
+    String title        = request.getParameter("title");
+    String author       = request.getParameter("author");
+    String publisher    = request.getParameter("publisher");
+    boolean available   = Boolean.parseBoolean(request.getParameter("available"));
+    int quantity        = Integer.parseInt(request.getParameter("quantity"));
+    String genre        = request.getParameter("genre");
+    String description  = request.getParameter("description");
+
+    return new Book(id, title, author, publisher, available, quantity, genre, description);
+  }
+
   private void setAccessControlHeaders(HttpServletResponse response) {
     response.setHeader("Access-Control-Allow-Origin", "*");
+    response.setHeader("Access-Control-Allow-Methods", "*");
     response.setHeader(
         "Access-Control-Allow-Headers",
         "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"

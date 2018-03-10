@@ -12,88 +12,120 @@ import com.prm.model.Book;
 import com.prm.utils.DBUtils;
 
 public class BookDao implements Serializable {
-    private PreparedStatement statement;
-    private Connection connection;
-    private ResultSet resultSet;
+  private PreparedStatement statement;
+  private Connection connection;
+  private ResultSet resultSet;
 
-    private void closeConnection() {
-        try {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+  private void closeConnection() {
+    try {
+      if (resultSet != null) {
+        resultSet.close();
+      }
+      if (statement != null) {
+        statement.close();
+      }
+      if (connection != null) {
+        connection.close();
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public boolean insert(Book book) {
+    boolean result = false;
+
+    try {
+      String sql = "INSERT INTO book (title, author, publisher, available, quantity, genre, description) VALUES(?,?,?,?,?,?,?)";
+
+      connection = DBUtils.getConnection();
+      statement = connection.prepareStatement(sql);
+
+      statement.setString(1, book.getTitle());
+      statement.setString(2, book.getAuthor());
+      statement.setString(3, book.getPublisher());
+      statement.setBoolean(4, book.isAvailable());
+      statement.setInt(5, book.getQuantity());
+      statement.setString(6, book.getGenre());
+      statement.setString(7, book.getDescription());
+
+      result = statement.executeUpdate() > 0;
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      closeConnection();
     }
 
-    public boolean insert(Book book) {
-        boolean result = false;
+    return result;
+  }
 
-        try {
-            String sql = "INSERT INTO book (title, author, publisher, available, quantity, genre, description) VALUES(?,?,?,?,?,?,?)";
+  public boolean update(Book book) {
+    boolean result = false;
 
-            connection = DBUtils.getConnection();
-            statement = connection.prepareStatement(sql);
+    try {
+      String sql = "UPDATE book " +
+          "SET title = ?, author = ?, publisher = ?, available = ?, quantity = ?, genre = ?, description = ? " +
+          "WHERE id = ?";
 
-            statement.setString(1, book.getTitle());
-            statement.setString(2, book.getAuthor());
-            statement.setString(3, book.getPublisher());
-            statement.setBoolean(4, book.isAvailable());
-            statement.setInt(5, book.getQuantity());
-            statement.setString(6, book.getGenre());
-            statement.setString(7, book.getDescription());
+      connection = DBUtils.getConnection();
+      statement = connection.prepareStatement(sql);
 
-            result = statement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeConnection();
-        }
+      statement.setString(1, book.getTitle());
+      statement.setString(2, book.getAuthor());
+      statement.setString(3, book.getPublisher());
+      statement.setBoolean(4, book.isAvailable());
+      statement.setInt(5, book.getQuantity());
+      statement.setString(6, book.getGenre());
+      statement.setString(7, book.getDescription());
+      statement.setInt(8, book.getId());
 
-        return result;
+      result = statement.executeUpdate() > 0;
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      closeConnection();
     }
 
-    public List<Book> getAllBooks() {
-        List<Book> result = new ArrayList<>();
+    return result;
+  }
 
-        try {
-            String sql = "SELECT * FROM book";
-            String title, author, publisher, genre, description = null;
-            boolean isAvailable;
-            int quantity;
-            Book book = null;
+  public List<Book> getAllBooks() {
+    List<Book> result = new ArrayList<>();
 
-            connection = DBUtils.getConnection();
-            statement = connection.prepareStatement(sql);
-            resultSet = statement.executeQuery();
+    try {
+      int id;
+      String sql = "SELECT * FROM book";
+      String title, author, publisher, genre, description = null;
+      boolean isAvailable;
+      int quantity;
+      Book book = null;
 
-            while (resultSet.next()) {
-                title       = resultSet.getString("title");
-                author      = resultSet.getString("author");
-                publisher   = resultSet.getString("publisher");
-                genre       = resultSet.getString("genre");
-                quantity    = resultSet.getInt("quantity");
-                isAvailable = resultSet.getBoolean("available");
-                description = resultSet.getString("description");
+      connection = DBUtils.getConnection();
+      statement = connection.prepareStatement(sql);
+      resultSet = statement.executeQuery();
 
-                book = new Book(title, author, publisher, isAvailable, quantity, genre, description);
-                book.setLeaf(true);
+      while (resultSet.next()) {
+        id          = resultSet.getInt("id");
+        title       = resultSet.getString("title");
+        author      = resultSet.getString("author");
+        publisher   = resultSet.getString("publisher");
+        genre       = resultSet.getString("genre");
+        quantity    = resultSet.getInt("quantity");
+        isAvailable = resultSet.getBoolean("available");
+        description = resultSet.getString("description");
 
-                result.add(book);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeConnection();
-        }
+        book = new Book(id, title, author, publisher, isAvailable, quantity, genre, description);
+        book.setLeaf(true);
 
-        return result;
+        result.add(book);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      closeConnection();
     }
+
+    return result;
+  }
 
 }

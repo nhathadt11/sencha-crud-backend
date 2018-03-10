@@ -3,6 +3,7 @@ package com.prm.model;
 import java.io.Serializable;
 
 public class Book implements Serializable {
+  private int id;
   private String title;
   private String author;
   private String publisher;
@@ -15,77 +16,98 @@ public class Book implements Serializable {
   public Book() {
   }
 
-    public Book(String title, String author, String publisher, boolean isAvailable, int quantity, String genre, String description ) {
-        this.title = title;
-        this.author = author;
-        this.publisher = publisher;
-        this.isAvailable = isAvailable;
-        this.genre = genre;
-        this.description = description;
-        this.quantity = quantity;
-    }
+  public Book(String title, String author, String publisher,
+              boolean isAvailable, int quantity, String genre, String description ) {
+    this.title = title;
+    this.author = author;
+    this.publisher = publisher;
+    this.isAvailable = isAvailable;
+    this.genre = genre;
+    this.description = description;
+    this.quantity = quantity;
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  public Book(int id, String title, String author, String publisher,
+              boolean isAvailable, int quantity, String genre, String description ) {
+    this.id = id;
+    this.title = title;
+    this.author = author;
+    this.publisher = publisher;
+    this.isAvailable = isAvailable;
+    this.genre = genre;
+    this.description = description;
+    this.quantity = quantity;
+  }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public int getId() {
+    return id;
+  }
 
-    public String getAuthor() {
-        return author;
-    }
+  public void setId(int id) {
+    this.id = id;
+  }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
+  public String getTitle() {
+    return title;
+  }
 
-    public String getPublisher() {
-        return publisher;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
+  public String getAuthor() {
+    return author;
+  }
 
-    public boolean isAvailable() {
-        return isAvailable;
-    }
+  public void setAuthor(String author) {
+    this.author = author;
+  }
 
-    public void setAvailable(boolean available) {
-        isAvailable = available;
-    }
+  public String getPublisher() {
+    return publisher;
+  }
 
-    public String getGenre() {
-        return genre;
-    }
+  public void setPublisher(String publisher) {
+    this.publisher = publisher;
+  }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
+  public boolean isAvailable() {
+    return isAvailable;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public void setAvailable(boolean available) {
+    isAvailable = available;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public String getGenre() {
+    return genre;
+  }
 
-    public int getQuantity() {
-        return quantity;
-    }
+  public void setGenre(String genre) {
+    this.genre = genre;
+  }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public boolean isLeaf() {
-        return leaf;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public void setLeaf(boolean leaf) {
-        this.leaf = leaf;
-    }
+  public int getQuantity() {
+    return quantity;
+  }
+
+  public void setQuantity(int quantity) {
+    this.quantity = quantity;
+  }
+
+  public boolean isLeaf() {
+    return leaf;
+  }
+
+  public void setLeaf(boolean leaf) {
+    this.leaf = leaf;
+  }
 }
