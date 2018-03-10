@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-@WebServlet(name = "GetAllBooksServlet", urlPatterns = {"/GetAllBooksServlet"})
-public class GetAllBooksServlet extends HttpServlet {
+@WebServlet(name = "BookServlet", urlPatterns = {"/Books"})
+public class BookServlet extends HttpServlet {
 
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -26,10 +26,25 @@ public class GetAllBooksServlet extends HttpServlet {
    * @throws ServletException if a servlet-specific error occurs
    * @throws IOException if an I/O error occurs
    */
-  protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+  protected void preProcessRequest(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     response.setContentType("application/json");
     response.setHeader("Access-Control-Allow-Origin", "*");
+  }
+
+  // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+  /**
+   * Handles the HTTP <code>GET</code> method.
+   *
+   * @param request servlet request
+   * @param response servlet response
+   * @throws ServletException if a servlet-specific error occurs
+   * @throws IOException if an I/O error occurs
+   */
+  @Override
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    preProcessRequest(request, response);
 
     try (PrintWriter out = response.getWriter()) {
       JSONArray books = new JSONArray();
@@ -45,21 +60,6 @@ public class GetAllBooksServlet extends HttpServlet {
     }
   }
 
-  // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-  /**
-   * Handles the HTTP <code>GET</code> method.
-   *
-   * @param request servlet request
-   * @param response servlet response
-   * @throws ServletException if a servlet-specific error occurs
-   * @throws IOException if an I/O error occurs
-   */
-  @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
-    processRequest(request, response);
-  }
-
   /**
    * Handles the HTTP <code>POST</code> method.
    *
@@ -71,7 +71,25 @@ public class GetAllBooksServlet extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    processRequest(request, response);
+    preProcessRequest(request, response);
+
+    try (PrintWriter out = response.getWriter()) {
+      String title        = request.getParameter("title");
+      String author       = request.getParameter("author");
+      String publisher    = request.getParameter("publisher");
+      boolean available   = Boolean.parseBoolean(request.getParameter("available"));
+      int quantity        = Integer.parseInt(request.getParameter("quantity"));
+      String genre        = request.getParameter("genre");
+      String description  = request.getParameter("description");
+
+      boolean success = new BookDao().insert(new Book(title, author, publisher, available, quantity, genre, description));
+
+      if (success) {
+        response.setStatus(HttpServletResponse.SC_OK);
+      } else {
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      }
+    }
   }
 
   /**
