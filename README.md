@@ -1,7 +1,8 @@
 # sencha-crud-backend
 
-## Prerequisite
+## Prerequisites
 
+These following must be installed on your local machine:
 1. Maven
 2. Tomcat Server 7+
 
@@ -36,8 +37,22 @@
    ``` 
 ## Deployment
 
+### Database restore
+
+Create database if it does not already exists:
+
+```
+mysqladmin -u <username> -p create <database_name>
+```
+
+Restore from backup:
+
+```
+mysql -u <username> -p <database_name> < book.bak
+```
+
 Make sure you have execution permission on these files:
-```start.sh, build.sh, deploy.sh, redeploy.sh and undeploy.sh```
+```start.sh, build.sh, deploy.sh, redeploy.sh, undeploy.sh and stop.sh```
 If not, run the following:
 ```
 sudo chmod +x *.sh
@@ -51,18 +66,26 @@ Start tomcat server:
 
 ### Building
 
-This will do a clean install of the entire project:
+Open up settings.properties and change the following correspondingly:
+
+```
+db.jdbc.url=jdbc:mysql://localhost:3306/<database_name>
+db.jdbc.username=<username>
+db.jdbc.password=<password>
+```
+
+Clean and install entire project:
   - Linux: ```./build.sh```
   - Windows: ```build.bat```
 
 ### Deploying
 
-This will deploy the built app to configured tomcat server:
+Deploy the built app to configured tomcat server:
   - Linux: ```./deploy.sh```
   - Windows: ```deploy.bat```
 
 ### Stopping
 
-This will stop a running tomcat server:
+Stop a running tomcat server:
   - Linux: ```./stop.sh```
   - Windows: ```stop.bat```
