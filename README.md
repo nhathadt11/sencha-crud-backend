@@ -1,5 +1,10 @@
 # sencha-crud-backend
 
+## Prerequisite
+
+1. Maven
+2. Tomcat Server 7+
+
 ## Configuration
 
 ### Tomcat
@@ -9,13 +14,13 @@
 ```
 <role rolename="manager-gui"/>
 <role rolename="manager-script"/>
-<book username="admin" password="password" roles="manager-gui, manager-script"/>
+<user username="admin" password="password" roles="manager-gui, manager-script"/>
 ```
 ### Maven
 
 1. There are two locations where the settings.xml file may be found:
    - The Maven install: ```${maven.home}/conf/settings.xml```
-   - A book’s install: ```${book.home}/.m2/settings.xml```
+   - A user’s install: ```${user.home}/.m2/settings.xml```
 
 2. Once you have found it add:
    ```
