@@ -1,5 +1,10 @@
 # sencha-crud-backend
 
+## Related projects:
+
+1. [sencha-crud-frontend](https://github.com/nhathadt11/sencha-crud-frontend) (Sencha Touch)
+2. [sencha-ext-frontend](https://github.com/nhathadt11/sencha-ext-frontend) (Sencha ExtJs)
+
 ## Prerequisites
 
 These following must be installed on your local machine:
