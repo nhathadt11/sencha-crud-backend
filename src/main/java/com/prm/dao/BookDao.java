@@ -95,10 +95,10 @@ public class BookDao implements Serializable {
     try {
       int id;
       String sql = "SELECT * FROM book";
-      String title, author, publisher, genre, description = null;
+      String title, author, publisher, genre, description;
       boolean isAvailable;
       int quantity;
-      Book book = null;
+      Book book;
 
       connection = DBUtils.getConnection();
       statement = connection.prepareStatement(sql);
