@@ -66,7 +66,7 @@ sudo chmod +x *.sh
 ### Starting
 
 Start tomcat server:
-  - Linux: ```./start.sh```
+  - Linux/Mac: ```./start.sh```
   - Windows: ```start.bat```
 
 ### Building
@@ -80,19 +80,19 @@ db.jdbc.password=<password>
 ```
 
 Clean and install entire project:
-  - Linux: ```./build.sh```
+  - Linux/Mac: ```./build.sh```
   - Windows: ```build.bat```
 
 ### Deploying
 
 Deploy the built app to configured tomcat server:
-  - Linux: ```./deploy.sh```
+  - Linux/Mac: ```./deploy.sh```
   - Windows: ```deploy.bat```
 
 ### Stopping
 
 Stop a running tomcat server:
-  - Linux: ```./stop.sh```
+  - Linux/Mac: ```./stop.sh```
   - Windows: ```stop.bat```
   
 ## References:
