@@ -89,3 +89,8 @@ Deploy the built app to configured tomcat server:
 Stop a running tomcat server:
   - Linux: ```./stop.sh```
   - Windows: ```stop.bat```
+  
+## References:
+
+  - [Cross-origin Resource Sharing](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
+  - [Tomcat Deploy War](http://www.baeldung.com/tomcat-deploy-war)
